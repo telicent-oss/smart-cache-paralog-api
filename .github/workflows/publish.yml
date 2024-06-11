@@ -18,6 +18,19 @@ jobs:
   get-version:
     uses: telicent-oss/shared-workflows/.github/workflows/python-get-version-number.yml@main
 
+  build-docker-version:
+    uses: telicent-oss/shared-workflows/.github/workflows/python-push-to-registries.yml@CORE-248-smart-cache-paralog-api-opensource
+    needs:
+      - test
+      - get-version
+    with:
+      APP_NAME_PREFIX: ""
+      APP_NAME: paralog-api
+      DOCKERFILE: Dockerfile
+      PATH: ./
+      VERSION: ${{ needs.get-version.outputs.version }}
+    secrets: inherit
+
   do-github-release:
     name: Do GitHub Release
     uses: telicent-oss/shared-workflows/.github/workflows/python-gh-release.yml@main
