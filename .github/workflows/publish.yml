@@ -3,10 +3,9 @@ name: Build Docker Image, Scan and Release
 on:
   push:
     branches:
-      - "release-please--branches--main--components--release-please-action"
-#      - "main"
-#    paths:
-#      - "CHANGELOG.md"
+      - "main"
+    paths:
+      - "CHANGELOG.md"
   workflow_dispatch:
 
 jobs:
@@ -20,7 +19,7 @@ jobs:
     uses: telicent-oss/shared-workflows/.github/workflows/python-get-version-number.yml@main
 
   build-docker-version:
-    uses: telicent-oss/shared-workflows/.github/workflows/python-push-to-registries.yml@CORE-248-smart-cache-paralog-api-opensource
+    uses: telicent-oss/shared-workflows/.github/workflows/python-push-to-registries.yml@main
     needs:
       - test
       - get-version
