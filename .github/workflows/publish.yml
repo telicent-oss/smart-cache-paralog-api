@@ -19,7 +19,7 @@ jobs:
     uses: telicent-oss/shared-workflows/.github/workflows/python-get-version-number.yml@main
 
   build-docker-version:
-    uses: telicent-oss/shared-workflows/.github/workflows/python-push-to-registries.yml@CORE-248-smart-cache-paralog-api-opensource
+    uses: telicent-oss/shared-workflows/.github/workflows/python-push-to-registries.yml@main
     needs:
       - test
       - get-version

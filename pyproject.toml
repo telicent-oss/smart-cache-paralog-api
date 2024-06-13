@@ -1,12 +1,12 @@
 [project]
 name = "smart-cache-paralog-api"
-version = "1.2.1"
+version = "1.2.2"
 authors = [{name = "Telicent Ltd", email = "opensource@telicent.io"}]
 requires-python = "==3.12"
 dependencies = [
     "anyio==4.3.0", 
     "certifi==2024.2.2", 
-    "charset-normalizer==3.3.2", 
+    "charset-normalizer==3.3.2",
     "click==8.1.7", 
     "fastapi==0.110.0", 
     "h11==0.14.0", 
