@@ -107,8 +107,8 @@ class AccessMiddleware:
                     return JSONResponse(content={"message": "unauthorised, invalid token"}, status_code=401)
 
             except jwt.exceptions.PyJWKClientConnectionError:
-                return JSONResponse(content={"message": f"unable to connect to the server located at {self.jwks_url}, " \
-                                             "are you sure this server is running and reachable?"}, status_code=401)
+                return JSONResponse(content={"message": f"unable to connect to the server located at {self.jwks_url}" \
+                                             ", are you sure this server is running and reachable?"}, status_code=401)
 
             except (jwt.exceptions.InvalidTokenError, jwt.exceptions.PyJWKClientError):
                 return JSONResponse(content={"message": "unauthorised, invalid token"}, status_code=401)
