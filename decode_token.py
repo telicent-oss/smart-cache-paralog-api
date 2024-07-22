@@ -82,7 +82,8 @@ class AccessMiddleware:
             if not self.jwks_url and self.public_key_url:
                 self.logger(
                     "STARTUP",
-                    "Both JWK_URL and PUBLIC_KEY_URL are missing from the env variables (at least one of them have to be set), starting paralog without auth",
+                    "Both JWK_URL and PUBLIC_KEY_URL are missing from the env variables" \
+                    "(at least one of them have to be set), starting paralog without auth",
                     level=TelicentLogLevel.DEBUG,
                 )
             self.run_auth = False
@@ -106,7 +107,8 @@ class AccessMiddleware:
                     return JSONResponse(content={"message": "unauthorised, invalid token"}, status_code=401)
 
             except jwt.exceptions.PyJWKClientConnectionError:
-                return JSONResponse(content={"message": f"unable to connect to the server located at {self.jwks_url}, are you sure this server is running and reachable?"}, status_code=401)
+                return JSONResponse(content={"message": f"unable to connect to the server located at {self.jwks_url}, " \
+                                             "are you sure this server is running and reachable?"}, status_code=401)
 
             except (jwt.exceptions.InvalidTokenError, jwt.exceptions.PyJWKClientError):
                 return JSONResponse(content={"message": "unauthorised, invalid token"}, status_code=401)
