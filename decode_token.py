@@ -52,7 +52,7 @@ class AccessMiddleware:
                 f"Configuring auth with using header {self.jwt_header}",
                 level=TelicentLogLevel.DEBUG,
             )
-            if not jwks_url and not public_key_url:
+            if not self.jwks_url and not self.public_key_url:
                 self.logger(
                 "STARTUP",
                 "Both JWK_URL and config.public_key_url passed, JWK_URL takes preference",
@@ -73,18 +73,31 @@ class AccessMiddleware:
 
             self.run_auth = True
         else:
+            if not self.jwt_header:
+                self.logger(
+                    "STARTUP",
+                    "JWT_HEADER is missing from the env variable, starting paralog without auth",
+                    level=TelicentLogLevel.WARN,
+                )
+            if not self.jwks_url and self.public_key_url:
+                self.logger(
+                    "STARTUP",
+                    "Both JWK_URL and PUBLIC_KEY_URL are missing from the env variables" \
+                    "(at least one of them have to be set), starting paralog without auth",
+                    level=TelicentLogLevel.DEBUG,
+                )
             self.run_auth = False
 
 
     async def __call__(self, request: Request, call_next):
 
-        if self.jwt_header not in request.headers:
+        if self.jwt_header and self.jwt_header not in request.headers:
             self.logger("Authenticator", "Unauthorized access: No required header: " + self.jwt_header,
                     level=TelicentLogLevel.INFO, type="UNAUTHORIZED")
             return JSONResponse(content={"message": f"missing auth header: {self.jwt_header}"}, status_code=400)
-        encoded =  request.headers[self.jwt_header]
 
         if self.run_auth:
+            encoded =  request.headers[self.jwt_header]
             try:
                 token = self.validate_token(encoded)
 
@@ -93,9 +106,18 @@ class AccessMiddleware:
                         level=TelicentLogLevel.INFO, type="UNAUTHORIZED" )
                     return JSONResponse(content={"message": "unauthorised, invalid token"}, status_code=401)
 
+            except jwt.exceptions.PyJWKClientConnectionError:
+                return JSONResponse(content={"message": f"unable to connect to the server located at {self.jwks_url}" \
+                                             ", are you sure this server is running and reachable?"}, status_code=401)
+
             except (jwt.exceptions.InvalidTokenError, jwt.exceptions.PyJWKClientError):
                 return JSONResponse(content={"message": "unauthorised, invalid token"}, status_code=401)
 
+            except ValueError as e:
+                if "unknown url type" in e.__str__():
+                    return JSONResponse(content={"message": "Invalid JWK URL"}, status_code=400)
+                else:
+                    return JSONResponse(content={"message": "Internal Server Error"}, status_code=500)
             except Exception:
                 return JSONResponse(content={"message": "Internal Server Error"}, status_code=500)
 

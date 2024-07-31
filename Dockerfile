@@ -5,7 +5,7 @@ ENV PATH="${PATH}:/home/worker/.local/bin/"
 #to build confluent kafka
 RUN sed -i -e 's/v3\.18/edge/g' /etc/apk/repositories \
     && apk upgrade --update-cache --available
-RUN apk add gcc g++ librdkafka-dev
+RUN apk add gcc g++ librdkafka-dev libffi-dev
 
 COPY start.sh . 
 RUN chmod +x start.sh
