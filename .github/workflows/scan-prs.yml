@@ -5,7 +5,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  scan_pr:
+  scan-pr:
     uses: telicent-oss/shared-workflows/.github/workflows/python-generate-and-scan-application.yml@main
     with:
       SCAN_NAME: ${{ github.run_number }}
+
+  scan-dockerfile:
+    name: Scan Dockerfile
+    uses: telicent-oss/shared-workflows/.github/workflows/trivy-dockerfile-scan.yml@main
+    with:
+      SCAN_NAME: ${{ github.run_number }}-dockerfile
+      DOCKERFILE: Dockerfile
