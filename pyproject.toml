@@ -42,7 +42,7 @@ dev = [
 
 [tool.ruff]
 target-version = "py312"
-select = [
+lint.select = [
     "E",  # pycodestyle errors
     "W",  # pycodestyle warnings
     "F",  # pyflakes
