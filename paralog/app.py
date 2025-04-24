@@ -37,6 +37,7 @@ limitations under the License.
 
 load_dotenv()
 
+
 with open('./pyproject.toml') as f:
     toml_config = toml.load(f)
 
@@ -70,6 +71,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 jena = JenaConnector(
     os.getenv('JENA_HOST', 'localhost'),
