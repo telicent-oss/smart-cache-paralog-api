@@ -1,4 +1,4 @@
-## Smart Cache Paralog API
+# Smart Cache Paralog API
 
 A REST API for getting CARVER-style data out of an IES triplestore.
 
@@ -8,8 +8,13 @@ To get started, you need to use Python pip to install all the dependencies liste
 
 Note: if you're running the Telicent local deployment, you'll have to stop the paralog server container that it is running.
 
+## Dependencies
+
+- [Apache Jena](https://jena.apache.org/download/index.cgi)
+
 ## Usage
-The API is best run in a containerzed environment. A DockerFile has been provided to help with this. To begin with, make sure you have the following environment variables set.
+
+The API is best run in a containerised environment. A DockerFile has been provided to help with this. To begin with, make sure you have the following environment variables set.
 
 - JENA_URL (defaults to `localhost`)
 - JENA_DATASET (defaults to `knowledge`)  
@@ -21,64 +26,31 @@ After setting the environment variables;
 
 - Run `docker run -p 4001:4001 <image:id>`. The containerized API should start running and be mapped to port 4001 your host PC.
 
-## API
-API paths are:
+## Configuration
+
+### API Configuration
+
+General configuration for the API.
+
+| Value               | Default       | Description                                                |
+|---------------------|---------------|------------------------------------------------------------|
+| API_ROOT_PATH       | None          | API request prefix, e.g. "/api/v1/"                        |
+| API_OPENAPI_PATH    | /openapi.json | Where to serve the OpenAPI schema from (for the frontend)  |
+| API_LOG_LEVEL       | INFO          | Log level                                                  |
+| API_LOG_STDOUT      | 1             | Set to '1' to log to stdout, 0 to disable                  |
+| API_LOG_FILE        | 0             | Set to '1' to log to a file, 0 to disable                  |
+| API_LOG_FILE_PATH   | paralog.log   | Full path to the log file when API_LOG_FILE is set to 1    |
 
 
-    GET:
-    
-    /                                           Hello World
-    
-    /docs                                       OpenAPI docs
-    
-    /assessments                                Return all the assessments in the database
+### Jena Configuration
 
-    /assessments/asset-types                    Return all the asset types in the assessment - this is used to drive the checkboxes for the app
-        ?assessment=<uri-of-the-assessment>
+Apache Jena must be running.
 
-    /assessments/assets                         Return all the assets in the assessment, that are of the types specified in the query parameters
-        ?assessment=<uri-of-the-assessment>
-        ?types=<uri-of-asset-type> 1..many
-
-    /assessments/dependencies                   Return all the dependencies in the assessment, that exist between assets of the types specified in the query parameters
-        ?assessment=<uri-of-the-assessment>
-        ?types=<uri-of-asset-type> 1..many
-
-    /asset                                      Return all the info we have about the asset provided in the assetUri query parameter
-        ?assetUri=<uri-of-asset>
-
-    /asset/dependents                           Return all the assets that are dependent onthe asset provided in the assetUri query parameter
-        ?assetUri=<uri-of-asset>
-
-    /asset/providers                            Return all the assets that depend onthe asset provided in the assetUri query parameter
-        ?assetUri=<uri-of-asset>
-
-    /asset/residents                            Returns all the people who have lived at that address
-        ?assetUri=<uri-of-asset>
-
-    /asset/parts                                Returns all the parts of an asset (e.g. road segments)
-        ?assetUri=<uri-of-asset>
-
-    /asset/participations                       Returns all the events an asset participates in
-        ?assetUri=<uri-of-asset>
-
-    /assessments/assets?assessment=XX           Return all the assets covered by the assessments listed in the query params (1:many)
-    
-    /assessments/connections?assessment=XX      Return all the connections between assets covered by the assessments listed in the query params (1:many)
-    
-    /assets                                     Return all assets of a given type (NOT USED CURRENTLY)
-        ?assetType=<uri-of-asset-type>
-
-    /person/residences                          Return all the residences a person has lived in
-        ?personUri=<uri of the person>
-
-    /event/participants                         Returns all the assets that participate in an event
-        ?eventUri=<uri-of-event>
-
-    /ontology/class                             Return info about a class (in this case, what the parent classes are)
-        ?classUri=<uri-of-the-asset-type>
-    
-    /flood-watch-areas                         Returns all flood watch areas with more specific flood areas
-
-    /flood-watch-areas/polygon                  Returns geo json for each flood area polygon uri
-        ?polygon_uri=<flood-area-polygon-uri>
+| Value          | Default   | Description                 |
+|----------------|-----------|-----------------------------|
+| JENA_URL       | localhost | Jena's host                 |
+| JENA_PORT      | 3000      | Jena's host port            |
+| JENA_DATASET   | knowledge | The Jena dataset to use     |
+| JENA_PROTOCOL  | http      | Protocol to connect to Jena |
+| JENA_USER      | None      | User to connect to Jena     |
+| JENA_PASSWORD  | None      | Password to connect to Jena |

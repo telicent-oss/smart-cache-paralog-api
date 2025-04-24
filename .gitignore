@@ -132,3 +132,5 @@ dmypy.json
 
 #Requirements (uses pyproject.toml)
 *requirements.txt
+.ruff_cache
+.idea
