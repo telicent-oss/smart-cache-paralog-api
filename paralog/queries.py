@@ -449,10 +449,9 @@ async def get_flood_area_polygon(uri):
         + """
         SELECT ?geoJsonValue
         WHERE {
-        <%s> ies:representationValue ?geoJsonValue .
+        <""" + uri + """> ies:representationValue ?geoJsonValue .
         }
         """
-        % uri
     )
 
 
@@ -462,7 +461,7 @@ async def get_states(uri):
         + """
         SELECT ?stateUri ?stateType ?starts ?ends ?inPeriod ?repType ?repValue
         WHERE {
-            ?stateUri ies:isStateOf <%s>  .
+            ?stateUri ies:isStateOf <""" + uri + """>  .
             ?stateUri a ?stateType .
             OPTIONAL {
                 ?stateUri ies:inPeriod ?pp .
@@ -485,7 +484,6 @@ async def get_states(uri):
             }
         }
         """
-        % uri
     )
 
 
