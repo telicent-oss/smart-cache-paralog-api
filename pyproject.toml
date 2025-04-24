@@ -32,11 +32,6 @@ dev = [
     "cyclonedx-bom==4.4.3",
     "types-toml",
     "types-requests==2.31.0.20240311",
-    # For dataloading
-    "pandas==2.2.3",
-    "python-geohash==0.8.5",
-    "Geohash==1.0",
-    "termcolor==3.0.1"
 ]
 
 [tool.ruff]
