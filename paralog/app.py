@@ -370,14 +370,14 @@ async def get_class(classUri: str):
 async def get_superclasses(classUris: list[str] = Query()):  # noqa
     class_uri_str = ", ".join([f"<{value}>" for value in classUris])
     query = (
-        """
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    SELECT ?uri ?superClass
-    WHERE {
-        ?uri rdfs:subClassOf ?superClass
-        FILTER (?uri in (""" + class_uri_str + """))
-    }
-    """
+        '''
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        SELECT ?uri ?superClass
+        WHERE {
+            ?uri rdfs:subClassOf ?superClass
+            FILTER (?uri in (''' + class_uri_str + '''))
+        }
+        '''
     )
     results = await utils.aggregate(await __ont_query(query), "uri")
     return results
