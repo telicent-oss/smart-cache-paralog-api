@@ -14,12 +14,10 @@ from fastapi_healthchecks.api.router import HealthcheckRouter, Probe
 from rdflib import Graph
 from rdflib.plugins.sparql.results.jsonresults import JSONResultSerializer
 
-from paralog import models, queries
+from paralog import models, queries, utils
 from paralog.__meta__ import DESCRIPTION, TITLE
 from paralog.jena import JenaConnector
 from paralog.logging_config import LOGGING
-from paralog.utils import headers as header_utils
-from paralog.utils import sparql as sparql_utils
 
 __license__ = """
 Copyright (c) Telicent Ltd.
@@ -87,7 +85,7 @@ async def __get_query_with_headers_from_request(
     query: str,
     request: Request,
 ):
-    headers = await header_utils.get_headers(request)
+    headers = await utils.get_headers(request)
 
     logger.info('Sending query to Jena')
     logger.debug(f'Query: {query}')
@@ -103,7 +101,7 @@ async def __get_query_with_headers_from_request_and_flatten(
 ):
     query_result = await __get_query_with_headers_from_request(query, request)
     logger.info('Flattening result')
-    flattened_result = await sparql_utils.flatten_out(query_result, return_first_obj)
+    flattened_result = await utils.flatten_out(query_result, return_first_obj)
     logger.debug(f'flattened result: {flattened_result}')
     return flattened_result
 
@@ -114,7 +112,7 @@ async def __get_query_with_headers_from_request_and_map(
 ):
     query_result = await __get_query_with_headers_from_request(query, request)
     logger.info('Mapping result')
-    mapped_result = await sparql_utils.map_flood_areas(query_result)
+    mapped_result = await utils.map_flood_areas(query_result)
     logger.debug(f'mapped result: {mapped_result}')
     return mapped_result
 
@@ -362,7 +360,7 @@ async def get_class(classUri: str):
         }
         '''
     )
-    results = await sparql_utils.aggregate(await __ont_query(query), "uri")
+    results = await utils.aggregate(await __ont_query(query), "uri")
     return results
 
 
@@ -379,5 +377,5 @@ async def get_superclasses(classUris: list[str] = Query()):  # noqa
     }
     """
     )
-    results = await sparql_utils.aggregate(await __ont_query(query), "uri")
+    results = await utils.aggregate(await __ont_query(query), "uri")
     return results
