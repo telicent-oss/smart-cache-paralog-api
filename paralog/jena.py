@@ -1,5 +1,6 @@
 import logging
 
+import requests
 from SPARQLWrapper import DIGEST, GET, JSON, POST, SPARQLWrapper
 
 __license__ = """
@@ -64,3 +65,12 @@ class JenaConnector:
         sparql.setMethod(POST)
         sparql.setQuery(update)
         return sparql.query()
+
+    async def ready(self):
+        try:
+            response = requests.get(self.url)
+            if response.status_code == 200:
+                return True
+        except requests.exceptions.ConnectionError:
+            return False
+        return False

@@ -20,8 +20,7 @@ class AccessMiddleware:
     """
     Simple middleware to validate and decode tokens
     """
-    def __init__(self, app, jwt_header: str = None, jwks_url: str = None, public_key_url: str = None):
-        self.app = app
+    def __init__(self, jwt_header: str = None, jwks_url: str = None, public_key_url: str = None):
         self.jwks_url = jwks_url
         self.public_key_url = public_key_url
         if self.public_key_url is not None:
@@ -117,3 +116,19 @@ class AccessMiddleware:
             )
             raise
         return data
+
+    async def ready(self):
+        if self.jwks_url:
+            url = self.jwks_url
+        elif self.public_key_url:
+            url = self.public_key_url
+        else:
+            return True
+
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                return True
+        except requests.exceptions.ConnectionError:
+            return False
+        return False

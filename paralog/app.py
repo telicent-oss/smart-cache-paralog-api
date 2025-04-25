@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_healthchecks.api.router import HealthcheckRouter, Probe
+from fastapi_healthchecks.checks import Check, CheckResult
 from rdflib import Graph
 from rdflib.plugins.sparql.results.jsonresults import JSONResultSerializer
 
@@ -45,6 +46,53 @@ if os.getenv('API_LOG_LEVEL') == 'DEBUG':
     )
 
 
+jena = JenaConnector(
+    os.getenv('JENA_HOST', 'localhost'),
+    os.getenv('JENA_PORT', '3030'),
+    os.getenv('JENA_DATASET', 'knowledge'),
+    protocol=os.getenv('JENA_PROTOCOL', 'http'),
+    user=os.getenv('JENA_USER', None),
+    pwd=os.getenv('JENA_PASSWORD', None),
+)
+
+
+access_middleware = AccessMiddleware(
+    jwt_header=os.getenv("JWT_HEADER"),
+    jwks_url=os.getenv("JWKS_URL"),
+    public_key_url=os.getenv("PUBLIC_KEY_URL")
+)
+
+
+class ApplicationRunningCheck(Check):
+    async def __call__(self) -> CheckResult:
+        return CheckResult(name="Application Running", passed=True, details='paralog is available')
+
+
+class JenaOnlineCheck(Check):
+    async def __call__(self) -> CheckResult:
+        if await jena.ready():
+            return CheckResult(name="Jena Ready", passed=True, details='Jena is ready')
+        else:
+            return CheckResult(name="Jena Ready", passed=False, details='Jena is not ready')
+
+
+class AuthEndPointOnlineCheck(Check):
+    async def __call__(self) -> CheckResult:
+        if not access_middleware.run_auth:
+            return CheckResult(
+                name="Authentication Not Configured", passed=True, details='No authentication backend is configured'
+            )
+
+        if await access_middleware.ready():
+            return CheckResult(
+                name="Authentication End Point", passed=True, details='Authentication End Point is ready'
+            )
+        else:
+            return CheckResult(
+                name="Authentication End Point", passed=False, details='Authentication End Point is not ready'
+            )
+
+
 app = FastAPI(
     description=DESCRIPTION,
     title=TITLE,
@@ -54,8 +102,8 @@ app = FastAPI(
 )
 app.include_router(
     HealthcheckRouter(
-        Probe(name="availability", checks=[],),
-        Probe(name="readiness", checks=[],),
+        Probe(name="availability", checks=[ApplicationRunningCheck()],),
+        Probe(name="readiness", checks=[JenaOnlineCheck(), AuthEndPointOnlineCheck()],),
     )
 )
 app.add_middleware(
@@ -64,12 +112,6 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-)
-access_middleware = AccessMiddleware(
-    app=app,
-    jwt_header=os.getenv("JWT_HEADER"),
-    jwks_url=os.getenv("JWKS_URL"),
-    public_key_url=os.getenv("PUBLIC_KEY_URL")
 )
 
 
@@ -80,16 +122,6 @@ async def add_custom_middleware(request: Request, call_next):
     """
     response = await access_middleware(request=request, call_next=call_next)
     return response
-
-
-jena = JenaConnector(
-    os.getenv('JENA_HOST', 'localhost'),
-    os.getenv('JENA_PORT', '3030'),
-    os.getenv('JENA_DATASET', 'knowledge'),
-    protocol=os.getenv('JENA_PROTOCOL', 'http'),
-    user=os.getenv('JENA_USER', None),
-    pwd=os.getenv('JENA_PASSWORD', None),
-)
 
 
 async def __get_query_with_headers_from_request(
