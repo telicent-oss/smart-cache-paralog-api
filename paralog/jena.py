@@ -2,8 +2,6 @@ import logging
 
 from SPARQLWrapper import DIGEST, GET, JSON, POST, SPARQLWrapper
 
-logger = logging.getLogger(__name__)
-
 __license__ = """
 Copyright (c) Telicent Ltd.
 
@@ -19,6 +17,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
+
+logger = logging.getLogger(__name__)
 
 
 class JenaConnector:

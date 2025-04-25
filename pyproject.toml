@@ -9,6 +9,8 @@ dependencies = [
     "toml==0.10.2",
     "python-dotenv==1.1.0",
     "SPARQLWrapper==2.0.0",
+    "pyJWT[crypto]==2.8.0",
+    "requests==2.32.3",
 ]
 classifiers = [
     'Programming Language :: Python :: 3.12',

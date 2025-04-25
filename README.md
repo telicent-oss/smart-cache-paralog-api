@@ -54,3 +54,28 @@ Apache Jena must be running.
 | JENA_PROTOCOL  | http      | Protocol to connect to Jena |
 | JENA_USER      | None      | User to connect to Jena     |
 | JENA_PASSWORD  | None      | Password to connect to Jena |
+
+
+### Authentication Configuration
+
+Paralog can evaluate JWT tokens to provide auth. A JWKS or public key end point must be configured, and the JWT header 
+must be set in configuration.
+
+| Value          | Default | Description                   |
+|----------------|---------|-------------------------------|
+| JWT_HEADER     | None    | The header containing the JTW |
+| JWKS_URL       | None    | JWKS end-point                |
+| PUBLIC_KEY_URL | None    | Public key end-point          |
+
+
+Furthermore, authentication has its own logger, with additional attributes provided for monitoring.
+
+#### paralog.decode_token
+
+Extra logging attributes are:
+
+method
+: one of, "STARTUP" (for logs during start up) or "Authenticator", for logs generated during authentication
+
+type
+: one of, "GENERAL" for general messages, or "UNAUTHORIZED" when authorization fails. 

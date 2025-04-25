@@ -16,6 +16,7 @@ from rdflib.plugins.sparql.results.jsonresults import JSONResultSerializer
 
 from paralog import models, queries, utils
 from paralog.__meta__ import DESCRIPTION, TITLE
+from paralog.decode_token import AccessMiddleware
 from paralog.jena import JenaConnector
 from paralog.logging_config import LOGGING
 
@@ -71,6 +72,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+access_middleware = AccessMiddleware(
+    app=app,
+    jwt_header=os.getenv("JWT_HEADER"),
+    jwks_url=os.getenv("JWKS_URL"),
+    public_key_url=os.getenv("PUBLIC_KEY_URL")
+)
+
+
+@app.middleware("http")
+async def add_custom_middleware(request: Request, call_next):
+    """
+    Passes request object containing token header information into access middleware.
+    """
+    response = await access_middleware(request=request, call_next=call_next)
+    return response
 
 
 jena = JenaConnector(

@@ -25,11 +25,21 @@ LOG_STDOUT = os.getenv('API_LOG_STDOUT', 1)
 LOG_FILE = os.getenv('API_LOG_FILE', 0)
 LOG_FILE_PATH = os.getenv('API_LOG_FILE_PATH', 'barry.log')
 
+AUTH_LOG_STDOUT = os.getenv('AUTH_LOG_STDOUT', 1)
+AUTH_LOG_FILE = os.getenv('AUTH_LOG_FILE', 0)
+AUTH_LOG_FILE_PATH = os.getenv('AUTH_LOG_FILE_PATH', 'barry.log')
+
 handlers = []
 if LOG_STDOUT == 1:
     handlers.append('stdout')
 if LOG_FILE == 1:
     handlers.append('file')
+
+auth_handlers = []
+if AUTH_LOG_STDOUT == 1:
+    auth_handlers.append('auth_stdout')
+if AUTH_LOG_FILE == 1:
+    auth_handlers.append('auth_file')
 
 
 LOGGING = {
@@ -39,6 +49,10 @@ LOGGING = {
         'simple': {
             'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         },
+        'auth_with_extras': {
+            'format': '{"time": "%(asctime)s", "level": "%(levelname)s", "method": "%(method)s", '
+                      '"type": "%(type)s", "message": "%(message)s"}'
+        }
     },
     'handlers': {
         'file': {
@@ -51,15 +65,30 @@ LOGGING = {
             'formatter': 'simple',
             'stream': 'ext://sys.stdout'
         },
+        'auth_file': {
+            'class': 'logging.FileHandler',
+            'filename': LOG_FILE_PATH,
+            'formatter': 'auth_with_extras'
+        },
+        'auth_stdout': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'auth_with_extras',
+            'stream': 'ext://sys.stdout'
+        },
     },
     'loggers': {
-        'paralog': {
+        'paralog.app': {
             'handlers': handlers,
             'level': LOG_LEVEL,
             'propagate': False
         },
-        'jena': {
+        'paralog.jena': {
             'handlers': handlers,
+            'level': LOG_LEVEL,
+            'propagate': False
+        },
+        'paralog.decode_token': {
+            'handlers': auth_handlers,
             'level': LOG_LEVEL,
             'propagate': False
         },
