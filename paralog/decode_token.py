@@ -27,7 +27,7 @@ class AccessMiddleware:
     """
     Simple middleware to validate and decode tokens
     """
-    def __init__(self, app, jwt_header: str, jwks_url: str = None, public_key_url: str = None):
+    def __init__(self, app, jwt_header: str = None, jwks_url: str = None, public_key_url: str = None):
         self.app = app
         self.jwks_url = jwks_url
         self.public_key_url = public_key_url
@@ -80,7 +80,7 @@ class AccessMiddleware:
                 )
                 return JSONResponse(content={"message": f"missing auth header: {self.jwt_header}"}, status_code=400)
 
-            encoded = request.headers[self.jwt_header]
+            encoded = request.headers[self.jwt_header or '']
             try:
                 token = await self.validate_token(encoded)
                 if token is None:
