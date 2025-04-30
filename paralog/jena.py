@@ -17,8 +17,13 @@ logger = logging.getLogger(__name__)
 class JenaConnector:
     def __init__(self, host, port, dataset, protocol="http", user=None, pwd=None):
         self.url = f"{protocol}://{host}:{port}/{dataset}"
+        logger.debug(f'Jena initialised: {self.url}')
         self.user = user
         self.pwd = pwd
+        if self.user and self.pwd:
+            logger.debug('Authentication credentials provided')
+        else:
+            logger.debug('Authentication credentials not provided')
 
     async def __create_sparql(self, endpoint, headers: dict | None =None):
         if not headers:

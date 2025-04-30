@@ -40,7 +40,8 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'simple': {
-            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            'format': '{"time": "%(asctime)s", "level": "%(levelname)s", "name": "%(name)s", '
+                      '"message": "%(message)s"}'
         },
         'auth_with_extras': {
             'format': '{"time": "%(asctime)s", "level": "%(levelname)s", "method": "%(method)s", '
