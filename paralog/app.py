@@ -83,7 +83,7 @@ async def add_custom_middleware(request: Request, call_next):
 
 
 jena = JenaConnector(
-    os.getenv('JENA_HOST', 'localhost'),
+    os.getenv('JENA_URL', 'localhost'),
     os.getenv('JENA_PORT', '3030'),
     os.getenv('JENA_DATASET', 'knowledge'),
     protocol=os.getenv('JENA_PROTOCOL', 'http'),

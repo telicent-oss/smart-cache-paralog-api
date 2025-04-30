@@ -14,17 +14,18 @@ Note: if you're running the Telicent local deployment, you'll have to stop the p
 
 ## Usage
 
-The API is best run in a containerised environment. A DockerFile has been provided to help with this. To begin with, make sure you have the following environment variables set.
+```shell
+docker run -p 8000:8000 telicent/paralog-api`
+``` 
 
-- JENA_URL (defaults to `localhost`)
-- JENA_DATASET (defaults to `knowledge`)  
-- JENA_PORT (defaults to `3000`)
+When running in Docker it will be necessary to at least set the `JENA_URL` variable. Assuming Jena is running on the Docker
+host:
 
-After setting the environment variables; 
+```shell
+docker run -e JENA_URL=host.docker.internal -p 8000:8000 --add-host=host.docker.internal:host-gateway telicent/paralog-api
+ ```
 
-- In your terminal, navigate to the same directory that contains the DockerFile and run the command `docker build .`. This should build a docker image which you would use to run the API in a container.
-
-- Run `docker run -p 4001:4001 <image:id>`. The containerized API should start running and be mapped to port 4001 your host PC.
+Please note, additional environment variables will be required depending on how your Jena 
 
 ## Configuration
 
@@ -49,7 +50,7 @@ Apache Jena must be running.
 | Value          | Default   | Description                 |
 |----------------|-----------|-----------------------------|
 | JENA_URL       | localhost | Jena's host                 |
-| JENA_PORT      | 3000      | Jena's host port            |
+| JENA_PORT      | 3030      | Jena's host port            |
 | JENA_DATASET   | knowledge | The Jena dataset to use     |
 | JENA_PROTOCOL  | http      | Protocol to connect to Jena |
 | JENA_USER      | None      | User to connect to Jena     |
@@ -79,3 +80,46 @@ method
 
 type
 : one of, "GENERAL" for general messages, or "UNAUTHORIZED" when authorization fails. 
+
+
+## Development
+
+### Developmenmt Dependencies
+
+- Jena available locally
+- \>=Python 3.12
+
+### Running Locally
+
+1. Checkout the project code
+2. Create and activate a virtual environment
+```shell
+python -m venv venv && . venv/bin/activate
+```
+2. Install the dependencies and set up the local environment:
+```shell
+./dev_setup.sh
+```
+3. Run FastAPI
+```shell
+fastapi run paralog/app.py
+```
+
+### .env
+
+You may create a .env file to configure the application in your development environment. Paralog will automatically 
+find and read configuration from this file.
+
+### Building
+
+To build the docker image you must first have a file called `sbom.json` at the route of your local project
+
+```shell
+touch sbom.json
+```
+
+You may then build the Docker image
+
+```shell
+docker build -t paralog-api . 
+```
