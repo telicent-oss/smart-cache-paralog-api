@@ -50,7 +50,7 @@ app = FastAPI(
     title=TITLE,
     root_path=os.getenv("API_ROOT_PATH", ""),
     version=toml_config['project']['version'],
-    openapi_url=os.getenv("API_OPENAPI_PATH", "/openapi.json")
+    openapi_url=os.getenv("API_OPENAPI_PATH", "/openapi.json"),
 )
 app.include_router(
     HealthcheckRouter(
@@ -83,7 +83,7 @@ async def add_custom_middleware(request: Request, call_next):
 
 
 jena = JenaConnector(
-    os.getenv('JENA_HOST', 'localhost'),
+    os.getenv('JENA_URL', 'localhost'),
     os.getenv('JENA_PORT', '3030'),
     os.getenv('JENA_DATASET', 'knowledge'),
     protocol=os.getenv('JENA_PROTOCOL', 'http'),
