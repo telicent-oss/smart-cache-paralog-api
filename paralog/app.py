@@ -184,7 +184,7 @@ async def get_asset(request: Request, assetUri: str):
     )
 
 
-@app.get("/asset/dependents", response_model=[models.Dependency])
+@app.get("/asset/dependents", response_model=list[models.Dependency])
 async def get_dependents_for_asset(request: Request, assetUri: str):
     """
     Returns all assets that depend on this asset.
