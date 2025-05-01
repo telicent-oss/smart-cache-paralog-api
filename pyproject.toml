@@ -6,7 +6,7 @@
 # copies or substantial portions of the Software.
 [project]
 name = "smart-cache-paralog-api"
-version = "1.2.3"
+version = "2.0.0"
 authors = [{name = "Telicent Ltd", email = "opensource@telicent.io"}]
 requires-python = "==3.12"
 dependencies = [
