@@ -86,6 +86,11 @@ LOGGING = {
             'level': LOG_LEVEL,
             'propagate': False
         },
+        'uvicorn': {
+            'handlers': handlers,
+            'level': LOG_LEVEL,
+            'propagate': False
+        },
         'uvicorn.access': {
             'handlers': handlers,
             'level': LOG_LEVEL,
