@@ -112,7 +112,7 @@ find and read configuration from this file.
 
 ### Building
 
-To build the docker image you must first have a file called `sbom.json` at the route of your local project
+To build the docker image you must first have a file called `sbom.json` at the root of your local project.
 
 ```shell
 touch sbom.json
