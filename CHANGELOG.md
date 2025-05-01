@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.0](https://github.com/telicent-oss/smart-cache-paralog-api/compare/v1.2.3...v2.0.0) (2025-05-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* refactored application ([#11](https://github.com/telicent-oss/smart-cache-paralog-api/issues/11))
+
+### Bug Fixes
+
+* asset dependents correctly has list as its return type ([#15](https://github.com/telicent-oss/smart-cache-paralog-api/issues/15)) ([aa83bc9](https://github.com/telicent-oss/smart-cache-paralog-api/commit/aa83bc927de9a33f08f6e5146383991a2892e7e2))
+
+
+### Miscellaneous
+
+* logging improvements ([#14](https://github.com/telicent-oss/smart-cache-paralog-api/issues/14)) ([f30ae62](https://github.com/telicent-oss/smart-cache-paralog-api/commit/f30ae62235357b4922c519bc29b535f1f12245ff))
+* refactored application ([#11](https://github.com/telicent-oss/smart-cache-paralog-api/issues/11)) ([287a9ba](https://github.com/telicent-oss/smart-cache-paralog-api/commit/287a9bae05bd42064ebf8082bc2e860ec36e3570))
+
 ## [1.2.3](https://github.com/telicent-oss/smart-cache-paralog-api/compare/v1.2.2...v1.2.3) (2024-08-06)
 
 
