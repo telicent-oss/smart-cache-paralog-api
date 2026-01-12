@@ -1,4 +1,4 @@
-name: Build Docker Image, Scan and Release
+name: docker-build
 
 on:
   push:
