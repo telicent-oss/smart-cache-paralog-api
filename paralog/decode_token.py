@@ -109,7 +109,9 @@ class AccessMiddleware:
                 key = req.text
             else:
                 raise RuntimeError("Token decoding requires either a jwks_url or public_key_url")
-            data = jwt.decode(token, key, algorithms=[headers['alg']])
+            data = jwt.decode(token, key, algorithms=[
+             'RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'ES512', 'PS256', 'PS384', 'PS512'
+            ])
         except Exception as e:
             self.logger.error(
                 f'Exception validating token: {str(e)}',
