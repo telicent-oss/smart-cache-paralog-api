@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.1](https://github.com/telicent-oss/smart-cache-paralog-api/compare/v2.0.0...v2.0.1) (2026-01-12)
+
+
+### Bug Fixes
+
+* passing my own hardcoded list ([25291eb](https://github.com/telicent-oss/smart-cache-paralog-api/commit/25291ebbbfa41b2cb659884cacfe609f5f95d696))
+
+
+### Miscellaneous
+
+* routine deps update ([a1f7977](https://github.com/telicent-oss/smart-cache-paralog-api/commit/a1f7977577e9e7adc30c9d284d8d1a6528df0b55))
+
 ## [2.0.0](https://github.com/telicent-oss/smart-cache-paralog-api/compare/v1.2.3...v2.0.0) (2025-05-01)
 
 
